@@ -26,7 +26,7 @@ on:
         description: 'Will parse the entire repository and find all files to validate across all types'
         default: true
         required: false
-        type: bool
+        type: boolean
     secrets:
       github-token:
         description: 'The token used to authenticate with GitHub'
