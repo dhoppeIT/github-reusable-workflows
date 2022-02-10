@@ -11,12 +11,10 @@ on:
         type: string
       filter_regex_exclude:
         description: 'Regular expression defining which files will be excluded from linting'
-        default: 'none'
         required: false
         type: string
       filter_regex_include:
         description: 'Regular expression defining which files will be processed by linters'
-        default: 'all'
         required: false
         type: string
       linter_rules_path:
