@@ -40,6 +40,12 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: Setup TFLint
+        if: hashFiles('**/.tflint.hcl') != ''
+        run: |
+          curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+          export TFLINT_PLUGIN_DIR="${RUNNER_TEMP}/_github_home/.tflint.d/plugins"
+          tflint -c ${{ inputs.linter_rules_path }}/.tflint.hcl --init
       - name: Lint Code
         uses: github/super-linter/slim@v4
         env:
