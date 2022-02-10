@@ -38,6 +38,29 @@ jobs:
       git-push: true
 ```
 
+**Lint Code:**
+
+```yaml
+---
+name: Lint
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+
+jobs:
+  lint:
+    uses: dhoppeIT/github-reusable-workflows/.github/workflows/lint.yaml@main
+    with:
+      default_branch: main
+      filter_regex_exclude: CHANGELOG.md
+      linter_rules_path: .
+    secrets:
+      github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
 **Validate Terraform (child module):**
 
 ```yaml

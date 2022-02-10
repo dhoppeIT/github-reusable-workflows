@@ -42,7 +42,7 @@ jobs:
       - name: Generate Readme
         uses: terraform-docs/gh-actions@v0.11.0
         with:
-          working-dir: ${{ inputs.working-dir }}
+          working-dir: ${{ inputs.working-dir }}
           output-file: ${{ inputs.output-file }}
           output-method: ${{ inputs.output-method }}
           git-commit-message: ${{ inputs.git-commit-message }}
