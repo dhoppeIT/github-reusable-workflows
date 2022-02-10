@@ -1,0 +1,47 @@
+---
+name: Lint
+
+on:
+  workflow_call:
+    inputs:
+      default_branch:
+        description: 'The name of the repository default branch'
+        default: 'master'
+        required: false
+        type: string
+      filter_regex_exclude:
+        description: 'Regular expression defining which files will be excluded from linting'
+        default: 'none'
+        required: false
+        type: string
+      filter_regex_include:
+        description: 'Regular expression defining which files will be processed by linters'
+        default: 'all'
+        required: false
+        type: string
+      linter_rules_path:
+        description: 'Directory for all linter configuration rules'
+        default: '.github/linters'
+        required: false
+        type: string
+    secrets:
+      github-token:
+        description: 'The token used to authenticate with GitHub'
+        required: false
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Lint Code
+        uses: github/super-linter/slim@v4
+        env:
+          DEFAULT_BRANCH: ${{ inputs.default_branch }}
+          FILTER_REGEX_EXCLUDE: ${{ inputs.filter_regex_exclude }}
+          FILTER_REGEX_INCLUDE: ${{ inputs.filter_regex_include }}
+          GITHUB_TOKEN: ${{ secrets.github-token }}
+          LINTER_RULES_PATH: ${{ inputs.linter_rules_path }}

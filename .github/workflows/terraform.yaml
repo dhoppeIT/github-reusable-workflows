@@ -25,7 +25,7 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
-          terraform_version: ${{ inputs.terraform_version }}
+          terraform_version: ${{ inputs.terraform_version }}
       - name: Terraform Format
         run: terraform -chdir=${{ inputs.working_dir }} fmt -check -diff
       - name: Terraform Init
