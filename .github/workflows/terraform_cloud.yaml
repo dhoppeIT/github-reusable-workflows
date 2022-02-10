@@ -37,11 +37,13 @@ jobs:
       - name: Environment (stage)
         if: ${{ inputs.multiple_workspaces && (github.base_ref == 'develop' || github.ref == 'refs/heads/develop') }}
         run: |
-          echo "TF_WORKSPACE=stage >> $GITHUB_ENV"
+          # shellcheck disable=SC2086
+          echo "TF_WORKSPACE=stage" >> $GITHUB_ENV
       - name: Environment (prod)
         if: ${{ inputs.multiple_workspaces && (github.base_ref == 'main' || github.ref == 'refs/heads/main') }}
         run: |
-          echo "TF_WORKSPACE=prod >> $GITHUB_ENV"
+          # shellcheck disable=SC2086
+          echo "TF_WORKSPACE=prod" >> $GITHUB_ENV
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1
         with:
