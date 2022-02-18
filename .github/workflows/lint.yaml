@@ -80,7 +80,7 @@ jobs:
         run: terraform -chdir=${{ inputs.working_dir }} init
       - name: Stash changes
         if: hashFiles('**/.tflint.hcl') != ''
-        run: git stash -- terraform/.terraform.lock.hcl
+        run: git stash -- ${{ inputs.working_dir }}/.terraform.lock.hcl
       - name: Setup TFLint
         if: hashFiles('**/.tflint.hcl') != ''
         run: |
