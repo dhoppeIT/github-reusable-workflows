@@ -4,6 +4,21 @@ name: Lint
 on:
   workflow_call:
     inputs:
+      multiple_workspaces:
+        description: 'If true it will support multiple workspaces'
+        default: false
+        required: false
+        type: boolean
+      terraform_version:
+        description: 'The version of Terraform CLI to install'
+        default: 'latest'
+        required: false
+        type: string
+      working_dir:
+        description: 'Switch to a different working directory before executing the given subcommand'
+        default: '.'
+        required: false
+        type: string
       default_branch:
         description: 'The name of the repository default branch'
         default: 'master'
@@ -28,9 +43,13 @@ on:
         required: false
         type: boolean
     secrets:
+      cli_config_credentials_token:
+        description: 'The API token for a Terraform Cloud/Enterprise instance'
+        required: false
       github-token:
         description: 'The token used to authenticate with GitHub'
         required: false
+
 jobs:
   lint:
     name: Lint Code
@@ -46,6 +65,25 @@ jobs:
           curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
           export TFLINT_PLUGIN_DIR="${RUNNER_TEMP}/_github_home/.tflint.d/plugins"
           tflint -c ${{ inputs.linter_rules_path }}/.tflint.hcl --init
+      - name: Environment (stage)
+        if: ${{ inputs.multiple_workspaces && (github.base_ref == 'develop' || github.ref == 'refs/heads/develop') }}
+        run: |
+          # shellcheck disable=SC2086
+          echo "TF_WORKSPACE=stage" >> $GITHUB_ENV
+      - name: Environment (prod)
+        if: ${{ inputs.multiple_workspaces && (github.base_ref == 'main' || github.ref == 'refs/heads/main') }}
+        run: |
+          # shellcheck disable=SC2086
+          echo "TF_WORKSPACE=prod" >> $GITHUB_ENV
+      - name: Setup Terraform
+        if: hashFiles('**/.tflint.hcl') != ''
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.cli_config_credentials_token }}
+          terraform_version: ${{ inputs.terraform_version }}
+      - name: Terraform Init
+        if: hashFiles('**/.tflint.hcl') != ''
+        run: terraform -chdir=${{ inputs.working_dir }} init
       - name: Lint Code
         uses: github/super-linter/slim@v4
         env:
