@@ -9,9 +9,19 @@ on:
         default: false
         required: false
         type: boolean
+      path:
+        description: "Create a release from a path other than the repository's root"
+        default: '.'
+        required: false
+        type: string
       pull-request-title-pattern:
         description: 'Title pattern used to make release PR'
         default: 'chore${scope}: release${component} ${version}'
+        required: false
+        type: string
+      changelog-path:
+        description: 'Configure alternate path for CHANGELOG.md'
+        default: 'CHANGELOG.md'
         required: false
         type: string
       release-type:
@@ -29,4 +39,6 @@ jobs:
         with:
           release-type: ${{ inputs.release-type }}
           bump-minor-pre-major: ${{ inputs.bump-minor-pre-major }}
+          path: ${{ inputs.path }}
           pull-request-title-pattern: ${{ inputs.pull-request-title-pattern }}
+          changelog-path: ${{ inputs.changelog-path }}
