@@ -71,7 +71,7 @@ jobs:
           echo "TF_WORKSPACE=prod" >> $GITHUB_ENV
       - name: Setup Terraform
         if: hashFiles('**/.tflint.hcl') != ''
-        uses: hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v2.0.2
         with:
           cli_config_credentials_token: ${{ secrets.cli_config_credentials_token }}
           terraform_version: ${{ inputs.terraform_version }}
