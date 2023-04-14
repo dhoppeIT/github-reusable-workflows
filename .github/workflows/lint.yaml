@@ -88,7 +88,7 @@ jobs:
           export TFLINT_PLUGIN_DIR="${RUNNER_TEMP}/_github_home/.tflint.d/plugins"
           tflint -c ${{ inputs.linter_rules_path }}/.tflint.hcl --init
       - name: Lint Code
-        uses: github/super-linter/slim@v4
+        uses: github/super-linter/slim@v5
         env:
           DEFAULT_BRANCH: ${{ inputs.default_branch }}
           FILTER_REGEX_EXCLUDE: ${{ inputs.filter_regex_exclude }}
